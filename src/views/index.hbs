@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{title}}</title>
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    body {
+      position: relative;
+    }
+
+   
+
+    .rank-body-bottom {
+      width: 300px;
+      padding: 10px;
+    }
+
+    select,
+    Button {
+      width: 50px;
+      height: 30px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input {
+      width: 150px;
+      height: 30px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding-left: 5px;
+    }
+    .msg{
+      display: none;
+    }
+  </style>
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script src="https://cdn.socket.io/4.5.2/socket.io.min.js"></script>
+</head>
+
+<body>
+  <div class="rank-body-bottom">
+    <div class="name">
+      <input id="select" placeholder="请输入昵称" />
+      <Button id="name-btn">确认</Button>
+    </div>
+    <div class="msg">
+      <p>昵称： <span class="nickName"></span></p>
+      <input id="text" placeholder="请输入消息内容" />
+      <Button id="btn">发送</Button>
+      <div>
+        <p>提示：文字动作</p>
+        <p>加入</p>
+        <p>开始</p>
+        <p>上</p>
+        <p>下</p>
+        <p>左</p>
+        <p>右</p>
+        <p>左转</p>
+        <p>右转</p>
+      </div>
+    </div>
+  </div>
+  <script>
+
+  // 创建websocket通信，触发相应的动作。
+  const socket = io('http://localhost:7000', {
+    path: '/socket/game'
+  })
+  // ws链接成功
+  socket.on('connect', () => {
+    console.log('connect', socket.id);
+    // socket.emit('data', 'world222222');
+  });
+  // 断开链接
+  socket.on('disconnect', reason => {
+    console.log('disconnect', reason); // undefined
+  });
+  // 事件订阅
+  socket.on('data', data => {
+    console.log('data', data)
+    actionType(data)
+  });
+  // 异常重试
+  socket.on('connect_error', () => {
+    setTimeout(() => {
+      socket.connect();
+    }, 5000);
+  });
+  </script>
+  <script>
+    const ACTIONS  = {
+      '开始游戏': 1001
+    }
+    $('#name-btn').click(() => {
+      const name = $('#select').val().replace(/ +/g, '')
+      if (!name) {
+        window.alert('请输入昵称')
+        return false
+      }
+      $('.nickName').text(name)
+      $('.name').hide()
+      $('.msg').show()
+    })
+    $('#btn').click(() => {
+      const text = $('#text').val().replace(/ +/g, '')
+      const name = $('#select').val().replace(/ +/g, '')
+      if (!text || !name) {
+        window.alert('请输入消息/昵称')
+        return false
+      }
+      const type = ACTIONS[text] || 0
+      socket.emit('data', { type, text, name });
+      $('#text').val('')
+    })
+  </script>
+</body>
+
+</html>
