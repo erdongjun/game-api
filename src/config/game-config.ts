@@ -1,8 +1,9 @@
 
 type GameTypes = {
-  [key: number]: {
+  [key: number|string]: {
     type: number
     text: string
+    actionType?: string
   }
 }
 
@@ -10,73 +11,61 @@ export const GAME_TYPE: GameTypes = {
   // 100x 游戏状态
   // 200x 游戏动作
   // 300x 榜单动作
-  1001: {
+  '开始': {
     type: 1001,
     text: '开始游戏',
   },
-  1002: {
+  '暂停': {
     type: 1002,
     text: '暂停游戏',
   },
-  1003: {
+  '退出': {
     type: 1003,
-    text: '退出游戏',
+    text: '再来一局',
   },
-  1004: {
+  '重开': {
     type: 1004,
-    text: '重新开始游戏',
+    text: '继续游戏',
   },
-  1005: {
+  '回退': {
     type: 1005,
-    text: '复活',
+    text: '回退上一步',
   },
-  1006: {
-    type: 1006,
-    text: '你被击败',
-  },
-  1007: {
-    type: 1007,
-    text: '击杀成功',
-  },
-  1008: {
-    type: 1008,
-    text: '上一步',
-  },
-  1009: {
-    type: 1009,
-    text: '加入游戏',
-  },
-  1010: {
-    type: 1010,
-    text: '退出游戏',
-  },
-  2001: {
+ 
+  '左转': {
     type: 2001,
     text: '左转',
+    actionType: 'TURNLEFT',
   },
-  2002: {
+  '右转': {
     type: 2002,
     text: '右转',
+     actionType: 'TURNRIGHT',
   },
-  2003: {
+  '上': {
     type: 2003,
-    text: '向上走',
+    text: '向上一步',
+    actionType: 'TOP',
   },
-  2004: {
+  '下': {
     type: 2004,
-    text: '向下走',
+    text: '向下一步',
+    actionType: 'BOTTOM',
   },
-  2005: {
+  '左': {
     type: 2005,
-    text: '向左走',
+    text: '向左一步',
+    actionType: 'LEFT',
   },
-  2006: {
+  '右': {
     type: 2006,
-    text: '向右走',
+    text: '向右一步',
+    actionType: 'RIGHT',
   },
+  
   3001: {
     type: 3001,
-    text: '上榜了',
+    text: '恭喜你勇夺第一名！继续加油！冲冲冲！',
   },
   3002: {
     type: 3002,
@@ -88,6 +77,18 @@ export const GAME_TYPE: GameTypes = {
   },
   3004: {
     type: 3004,
-    text: '加油',
+    text: '你被击败',
+  },
+  3005: {
+    type: 3005,
+    text: '恭喜你击杀成功！',
+  },
+  3006: {
+    type: 3006,
+    text: '退出游戏',
+  },
+  3007: {
+    type: 3007,
+    text: '加入游戏',
   },
 }
